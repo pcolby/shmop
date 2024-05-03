@@ -47,15 +47,15 @@ jobs:
           - macos-14
           - ubuntu-20.04
           - ubuntu-22.04
-          - windows-2019
-          - windows-2022
+          #- windows-2019 # GitHub does not provide the ext-shmop PHP extension.
+          #- windows-2022 # GitHub does not provide the ext-shmop PHP extension.
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
     - name: Validate composer files
       run: composer validate --strict
     - name: Install dependencies
-      run: composer install --no-progress || composer upgrade --no-progress
+      run: composer install --no-progress
     - name: Check PHP sniffs
       run: ./vendor/bin/phpcs -v
     - name: Run unit tests
