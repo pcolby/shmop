@@ -20,6 +20,9 @@ jobs:
           - windows-2022
       fail-fast: false
     steps:
+    - name: Install PHP_CodeSniffer
+      if: startsWith(matrix.os, 'ubuntu')
+      run: sudo apt update && sudo apt upgrade && sudo apt install php-codesniffer
     - uses: actions/checkout@v4
     - name: Check PHP syntax
       run: find src/ tests/ -name *.php -print0 | xargs -0n1 php --syntax-check
