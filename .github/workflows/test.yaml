@@ -55,7 +55,7 @@ jobs:
     - name: Validate composer files
       run: composer validate --strict
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      run: composer install --no-progress || composer upgrade --no-progress
     - name: Check PHP sniffs
       run: ./vendor/bin/phpcs -v
     - name: Run unit tests
