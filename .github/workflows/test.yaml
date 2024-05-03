@@ -21,6 +21,9 @@ jobs:
       fail-fast: false
     steps:
     - name: Install PHP_CodeSniffer
+      if: startsWith(matrix.os, 'macos')
+      run: brew install php-code-sniffer
+    - name: Install PHP_CodeSniffer
       if: startsWith(matrix.os, 'ubuntu')
       run: sudo apt update && sudo apt upgrade && sudo apt install php-codesniffer
     - uses: actions/checkout@v4
