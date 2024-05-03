@@ -1,0 +1,58 @@
+name: Test
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  platform:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - macos-12
+          - macos-13
+          - macos-14
+          - ubuntu-20.04
+          - ubuntu-22.04
+          - windows-2019
+          - windows-2022
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check PHP syntax
+      run: find src/ tests/ -name *.php -print0 | xargs -0n1 php --syntax-check
+      shell: bash
+    - name: Check PHP sniffs
+      run: phpcs -v
+    - name: Run unit tests
+      run: phpunit --coverage-clover=coverage.xml
+    # Upload coverage artificact.
+    # Report partial coverage to Codacy.
+
+  composer:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - macos-12
+          - macos-13
+          - macos-14
+          - ubuntu-20.04
+          - ubuntu-22.04
+          - windows-2019
+          - windows-2022
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v4
+    - name: Validate composer files
+      run: composer validate --strict
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+    - name: Check PHP sniffs
+      run: ./vendor/bin/phpcs -v
+    - name: Run unit tests
+      run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
+    # Upload coverage artificact.
+    # Report partial coverage to Codacy.
